@@ -14,3 +14,18 @@ def movie_list(request):
     return JsonResponse(serializer.data, safe=False)
 
 
+def movie_detail(request, pk):
+    '''
+    Returns a single movie with detail
+    :param request:
+    :return:
+    '''
+    try:
+        movie = Movie.objects.get(pk=pk)
+    except Movie.DoesNotExist:
+        return HttpResponse(status=404)
+
+    serializer = MoviesSerializer(movie)
+    return JsonResponse(serializer.data)
+
+
