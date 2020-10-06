@@ -13,4 +13,6 @@ class MovieDetail(generics.RetrieveAPIView):
     queryset = Movie.objects.all()
     serializer_class = MoviesSerializer
 
+def scrape_data(request):
+    url_to_scrap = request.GET.get('url', '')
 
