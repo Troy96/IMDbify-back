@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'movies.apps.MoviesConfig',
     'users.apps.UsersConfig',
+    'watchlist.apps.WatchlistConfig',
+    'watchedlist.apps.WatchedlistConfig',
     'rest_framework.authtoken',
 ]
 

@@ -1,5 +1,6 @@
+from watchedlist.models import WatchedList
 from watchlist.models import WatchList
-from watchlist.serializers import WatchListSerializer
+from watchedlist.serializers import WatchedListSerializer
 from rest_framework.permissions import IsAuthenticated
 from django.http import JsonResponse, HttpResponse
 from rest_framework.parsers import JSONParser
@@ -12,11 +13,11 @@ from rest_framework.views import exception_handler
 @api_view(['GET', 'POST'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def view_or_add_to_watchlist(request):
+def view_or_add_to_watchedlist(request):
 
     if request.method == 'GET':
-        data = request.user.watchlist_set.all()
-        serializer = WatchListSerializer(data, many=True)
+        data = request.user.watchedlist_set.all()
+        serializer = WatchedListSerializer(data, many=True)
         return JsonResponse(serializer.data, safe=False)
 
     if request.method == 'POST':
@@ -27,22 +28,28 @@ def view_or_add_to_watchlist(request):
             movie = Movie.objects.get(id=movieId)
         except Movie.DoesNotExist:
             return  JsonResponse({'detail': 'Movie not found'}, status=404)
-
         try:
             watchlistobj = WatchList.objects.get(movie=movie, user=user)
-            return  JsonResponse({'detail': 'Movie already added in watchlist!'}, status=400)
-        except WatchList.DoesNotExist:
-            watchlist = WatchList()
-            watchlist.user = user
-            watchlist.movie = movie
-            watchlist.save()
-            return  JsonResponse({'detail': 'Movie  added in watchlist!'}, status=201)
+            watchlistobj.delete() #Delete the movie from watchlist if exists for a user
+        except:
+            pass
+        try:
+            watchedlistobj = WatchedList.objects.get(movie=movie, user=user)
+            return JsonResponse({'detail': 'Movie already added in Watchlist!'}, status=400)
+        except WatchedList.DoesNotExist:
+            watchedlist = WatchedList()
+            watchedlist.user = user
+            watchedlist.movie = movie
+            watchedlist.save()
+            return JsonResponse({'detail': 'Movie added to Watchedlist!'}, status=201)
+
+
 
 
 @api_view(['DELETE'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
-def remove_from_watchlist(request, movieId):
+def remove_from_watchedlist(request, movieId):
 
     user = request.user
 
@@ -51,12 +58,12 @@ def remove_from_watchlist(request, movieId):
     except Movie.DoesNotExist:
         return JsonResponse({'detail': 'Movie does not exist'}, status=404)
     try:
-        watchlistobj = WatchList.objects.get(user=user, movie=movie)
-    except WatchList.DoesNotExist:
-        return JsonResponse({'detail': 'Movie not found in Watchlist'}, status=404)
+        watchedlistobj = WatchedList.objects.get(user=user, movie=movie)
+    except WatchedList.DoesNotExist:
+        return JsonResponse({'detail': 'Movie not found in Watchedlist'}, status=404)
 
-    watchlistobj.delete()
-    return JsonResponse({'detail': 'Movie removed from Watchlist'}, status=204)
+    watchedlistobj.delete()
+    return JsonResponse({'detail': 'Movie removed from Watchedlist'}, status=204)
 
 
 
