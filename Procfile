@@ -1,1 +1,1 @@
-web: gunicorn IMDBify_back.wsgi --log-file -
+web: gunicorn IMDBify_back.IMDBify_back.wsgi --log-file -
