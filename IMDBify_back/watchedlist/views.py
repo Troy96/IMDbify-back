@@ -2,13 +2,11 @@ from watchedlist.models import WatchedList
 from watchlist.models import WatchList
 from watchedlist.serializers import WatchedListSerializer
 from rest_framework.permissions import IsAuthenticated
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
 from rest_framework.authentication import TokenAuthentication
 from movies.models import Movie
-from django.contrib.auth.decorators import login_required
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
-from rest_framework.views import exception_handler
 
 @api_view(['GET', 'POST'])
 @authentication_classes([TokenAuthentication])

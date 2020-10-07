@@ -1,6 +1,5 @@
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from rest_framework.parsers import JSONParser
-from django.contrib.auth.models import User
 from users.serializers import UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 

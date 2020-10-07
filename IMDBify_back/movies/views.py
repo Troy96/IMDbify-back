@@ -1,6 +1,5 @@
 from rest_framework import generics, filters
 from django.http import JsonResponse
-from rest_framework.parsers import JSONParser
 from movies.models import Movie
 from movies.serializers import MoviesSerializer
 from .scraper import scrape
