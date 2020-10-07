@@ -10,7 +10,7 @@ def scrape(url):
     links = [a.attrs.get('href') for a in soup.select('td.titleColumn a')]
     imdb_data = []
 
-    for index in range(0, 2):
+    for index in range(0, len(movies)):
         movie_str = movies[index].get_text()
         movie = (' '.join(movie_str.split()).replace('.', ''))
         name = movie[len(str(index)) + 1:-7]
